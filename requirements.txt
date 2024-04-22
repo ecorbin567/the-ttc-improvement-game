@@ -1,0 +1,8 @@
+# Requirements for the project, listed in alphabetical order.
+csv # for reading and writing data files
+networkx # for visualizing the graph
+nicegui # for the interactive visualization
+plotly>=5.18.0 # for visualizing the graph
+python-ta~=2.7.0 # for checking code
+statistics # for calculating spread of ridership
+typing # for Any variables
