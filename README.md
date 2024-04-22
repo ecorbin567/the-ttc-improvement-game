@@ -8,4 +8,6 @@ I modelled TTC and Bike Share Toronto ridership data using a graph that incorpor
 
 To run the interactive visualization, run main.py. The visualization only supports subway data.
 
+All of the datasets are in datasets.zip if you want to download them all at once, but you can also access them directly in this repository. They are the four .csv files.
+
 I am working on adding a location parameter to the graph that will allow the visualization to accurately display locations of subway stations.
