@@ -18,8 +18,9 @@ class _Vertex:
     lines: set[str]
     usage: int
     neighbours: set[_Vertex]
+    position: tuple[int, int]
 
-    def __init__(self, item: Any, lines: set[str], usage: int) -> None:
+    def __init__(self, item: Any, lines: set[str], usage: int, position: tuple[int, int] = (0, 0)) -> None:
         """Initialize a new vertex with the given item, line, and usage.
 
         This vertex is initialized with no neighbours
@@ -28,6 +29,7 @@ class _Vertex:
         self.lines = lines
         self.usage = usage
         self.neighbours = set()
+        self.position = position
 
     def degree(self) -> int:
         """Return the degree of this vertex."""
@@ -97,14 +99,14 @@ class Graph:
         """Initialize an empty graph (no vertices or edges)."""
         self._vertices = {}
 
-    def add_vertex(self, item: Any, lines: set[str], usage: int) -> None:
+    def add_vertex(self, item: Any, lines: set[str], usage: int, position: tuple[int, int]) -> None:
         """Add a vertex with the given item and kind to this graph.
 
         The new vertex is not adjacent to any other vertices.
         Do nothing if the given item is already in this graph.
         """
         if item not in self._vertices:
-            self._vertices[item] = _Vertex(item, lines, usage)
+            self._vertices[item] = _Vertex(item, lines, usage, position)
 
     def add_edge(self, item1: Any, item2: Any) -> None:
         """Add an edge between the two vertices with the given items in this graph.
@@ -175,7 +177,8 @@ class Graph:
             return None
 
     def to_networkx(self, max_vertices: int = 5000) -> nx.Graph:
-        """Convert this graph into a networkx Graph.
+        """
+        Convert this graph into a networkx Graph.
 
         max_vertices specifies the maximum number of vertices that can appear in the graph.
         (This is necessary to limit the visualization output for large graphs.)
@@ -185,14 +188,14 @@ class Graph:
         """
         graph_nx = nx.Graph()
         for v in self._vertices.values():
-            graph_nx.add_node(v.item, kind=v.lines, usage=round(v.usage))
+            graph_nx.add_node(v.item, kind=v.lines, usage=round(v.usage), position=v.position)
 
             for u in v.neighbours:
                 if graph_nx.number_of_nodes() < max_vertices:
-                    graph_nx.add_node(v.item, kind=v.lines, usage=round(v.usage))
+                    graph_nx.add_node(v.item, kind=v.lines, usage=round(v.usage), position=v.position)
 
                 if u.item in graph_nx.nodes:
-                    graph_nx.add_edge(v.item, u.item, kind=v.lines)
+                    graph_nx.add_edge(v.item, u.item)
 
             if graph_nx.number_of_nodes() >= max_vertices:
                 break
@@ -238,7 +241,44 @@ class Graph:
         >>> 'OSSINGTON' in christie_neighbours
         False
         """
-        self.add_vertex(name, lines, 0)
+        position = (0, 0)
+
+        if len(neighbours) == 0:
+            position = (-20, 20)
+        elif len(neighbours) == 1:
+            for nb in neighbours:
+                nb_vert = self._vertices[nb]
+                nb_x = nb_vert.position[0]
+                nb_y = nb_vert.position[1]
+                if len(nb_vert.neighbours) == 0:
+                    position = (nb_x + 1, nb_y)
+                else:
+                    x_diffs = []
+                    y_diffs = []
+                    for nb2_vert in nb_vert.neighbours:
+                        nb2_x = nb2_vert.position[0]
+                        nb2_y = nb2_vert.position[1]
+                        x_diffs.append(nb_x - nb2_x)
+                        y_diffs.append(nb_y - nb2_y)
+                    if len(nb_vert.neighbours) == 1:
+                        position = (nb_x + x_diffs[0], nb_y + y_diffs[0])
+                    else:
+                        diffs = []
+                        for i in range(len(x_diffs)):
+                            diffs.append((x_diffs[i], y_diffs[i]))
+                        if all(diff != (1, 0) for diff in diffs):
+                            position = (nb_x + 1, nb_y)
+                        elif all(diff != (-1, 0) for diff in diffs):
+                            position = (nb_x - 1, nb_y)
+                        elif all(diff != (0, 1) for diff in diffs):
+                            position = (nb_x, nb_y + 1)
+                        else:
+                            position = (nb_x, nb_y - 1)
+        else:
+            position = get_midpoint([self._vertices[neighbour].position for neighbour in neighbours])
+
+        self.add_vertex(name, lines, 0, position)
+
         usage = 0
         for neighbour in neighbours:
             for neighbour2 in neighbours:
@@ -275,7 +315,7 @@ class Graph:
         True
         """
         for neighbour in self.get_neighbours(name):
-            self._vertices[neighbour].usage *= (3 / 2)
+            self._vertices[neighbour].usage += (self._vertices[name].usage / self._vertices[name].degree())
             for neighbour2 in self.get_neighbours(name):
                 if neighbour2 not in self.get_neighbours(neighbour):
                     self.add_edge(neighbour, neighbour2)
@@ -377,6 +417,28 @@ class Graph:
         return result
 
 
+def get_midpoint(points: list[tuple[int, int]]) -> tuple[int, int]:
+    """
+    Helper function for add_station in the Graph class.
+    Returns the midpoint of two or more stations, which helps determine the position of a new station.
+    """
+    mid = midpoint(points[0][0], points[0][1], points[1][0], points[1][1])
+
+    if len(points) > 2:
+        for point in points[2:]:
+            mid = midpoint(mid[0], mid[1], point[0], point[1])
+
+    return mid
+
+
+def midpoint(x1, y1, x2, y2):
+    """
+    Helper function for get_midpoint, as defined above.
+    Calculates the midpoint of two points (x1, y1) and (x2, y2).
+    """
+    return (x1 + x2) / 2, (y1 + y2) / 2
+
+
 def load_subway_map(subway_file: str, lines_file: str) -> Graph:
     """
     Returns a Graph of subway data only. This is useful for the
@@ -400,7 +462,7 @@ def load_subway_map(subway_file: str, lines_file: str) -> Graph:
                 c.lines.add(row[2])
                 c.usage += int(row[5].strip())
             else:
-                g.add_vertex(row[1], {row[2]}, int(row[5].strip()))
+                g.add_vertex(row[1], {row[2]}, int(row[5].strip()), (int(row[6]), int(row[7])))
     with open(lines_file, 'r') as file:
         reader = csv.reader(file)
         count = 0
@@ -418,6 +480,7 @@ def load_subway_map(subway_file: str, lines_file: str) -> Graph:
 def load_extras(g: Graph, bikeshare_file: str, surface_file: str) -> Graph:
     """
     Adds surface and Bike Share data to an existing Graph for analysis purposes.
+    Not used in the visualization component, so positions don't matter and are hard-coded as (0, 0).
     >>> my_graph = load_subway_map('subway.csv', 'subway_lines.csv')
     >>> my_graph_extra = load_extras(my_graph, 'bikeshare_cleaned.csv', 'surface.csv')
     >>> surface_routes = [v.item for v in my_graph.get_all_vertices({'Surface'})]
@@ -430,32 +493,13 @@ def load_extras(g: Graph, bikeshare_file: str, surface_file: str) -> Graph:
         count = 0
         for row in reader:
             if count != 0:  # gets around the beginning of the file
-                g.add_vertex(row[1], {'Bike Share'}, int(row[2]))
+                g.add_vertex(row[1], {'Bike Share'}, int(row[2]), (0, 0))
             count += 1
 
     # surface
     with open(surface_file, 'r') as file:
         reader = csv.reader(file)
         for row in reader:
-            g.add_vertex(row[1], {'Surface', f'{row[0]} {row[1]}'}, int(row[2].strip()))
+            g.add_vertex(row[1], {'Surface', f'{row[0]} {row[1]}'}, int(row[2].strip()), (0, 0))
 
     return g
-
-
-if __name__ == '__main__':
-    # import python_ta.contracts
-    # python_ta.contracts.check_all_contracts()
-
-    # import doctest
-    #
-    # doctest.testmod()
-
-    import python_ta
-
-    python_ta.check_all(config={
-        'max-line-length': 120,
-        'disable': ['E1136', 'W0221'],
-        'extra-imports': ['csv', 'networkx', 'statistics'],
-        'allowed-io': ['load_subway_map', 'load_extras'],
-        'max-nested-blocks': 5
-    }, output='pyta_report.html')
