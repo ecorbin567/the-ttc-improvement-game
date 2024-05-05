@@ -1,7 +1,7 @@
 """
 Runs an interactive visualization of subway data with NiceGUI.
 This includes buttons that allow the user to view spread of ridership, add and remove stations,
-and add and remove lines, as well as view the visualized graph.
+and add and remove lines, as well as view and reset the visualized graph.
 """
 if __name__ in {"__main__", "__mp_main__"}:
     import transit_map
@@ -53,8 +53,9 @@ if __name__ in {"__main__", "__mp_main__"}:
             refresh_remove_line()
 
     def reset_map() -> None:
-        reset_graph = transit_map.load_subway_map('subway.csv', 'subway_lines.csv')
-        update_graph(reset_graph)
+        global subway_graph
+        subway_graph = transit_map.load_subway_map('subway.csv', 'subway_lines.csv')
+        update_graph(subway_graph)
 
     def update_graph(g: transit_map.Graph = subway_graph) -> None:
         fig.data = []
@@ -74,8 +75,69 @@ if __name__ in {"__main__", "__mp_main__"}:
         select_stations.refresh()
         select_remove_line.refresh()
 
+    @ui.page('/about_faq')
+    def about_faq():
+        ui.html('Are You Smarter Than Rick Leary? The TTC Improvement Game'
+                ).classes('w-full text-center').style('color: black; font-size: 275%; font-weight: 500')
+        with ui.row().classes('w-full justify-center'):
+            ui.button('Back to Game', on_click=ui.navigate.back)
+
+        ui.label('About').style('color: black; font-size: 250%; font-weight: 500')
+        ui.label('My name is Elise Corbin, and I have lived in Toronto for a little '
+                 'less than a year as of this writing. '
+                 'I created this game as a project for CSC111 at the University of Toronto, '
+                 'St. George. It combines two of my favourite things: '
+                 'computer science and transit. If you are curious about the code behind '
+                 'the game, please read on to "How It Works". I live between Ossington and '
+                 'Dufferin stations, but my favourite station is Dupont because of its '
+                 'reptile-exhibit-at-a-zoo vibes.')
+
+        ui.label('How It Works').style('color: black; font-size: 250%; font-weight: 500')
+        ui.label('I modelled TTC and Bike Share Toronto ridership data using a graph that incorporates subway stops, '
+                 'aboveground transit (streetcar and bus) stops, and bike docking stations. A vertex in the graph '
+                 'represents a stop, aboveground transit line, or bike docking station, and an edge between vertices '
+                 'represents a connection between two stops. I used Python\'s networkx and plotly libraries to create '
+                 'and plot the resulting graphs. I also created a graphical user interface (GUI) using NiceGUI that '
+                 'allows a user to edit the subway graph directly by adding and removing stations and lines, as well '
+                 'as see the effects of these edits on spread of ridership. You are interacting with it right now.')
+        ui.label('You can view the full code here:')
+        ui.link('https://github.com/ecorbin567/the-ttc-improvement-game',
+                'https://github.com/ecorbin567/the-ttc-improvement-game')
+
+        ui.label('FAQ').style('color: black; font-size: 250%; font-weight: 500')
+        (ui.label('Where are you getting the ridership numbers from?')
+         .style('color: black; font-size: 150%; font-weight: 500'))
+        ui.label('The baseline numbers are from ridership data I found on the City of Toronto\'s Open Data Catalogue. '
+                 'The most recent data I could find was from 2017, and I emailed the TTC to ask if they had any '
+                 'more recent data, but I never heard back. The changes in numbers you get from adding or removing '
+                 'stations are the result of assumptions that I hard-coded into the program. The assumptions are: ')
+        ui.label('Each new station takes 1/3 of the daily ridership from each of its neighbours.')
+        ui.label('When a station is removed, its daily ridership is absorbed equally by its neighbours.')
+        ui.label('When you add a new line and it creates a shorter path from one station to another, '
+                 'the new path gains 1/3 of the daily ridership from the old path.')
+        (ui.label('What is the significance of spread of ridership?')
+         .style('color: black; font-size: 150%; font-weight: 500'))
+        ui.label('The spread of ridership across stations is significant because '
+                 'it shows us whether the burden of large traffic volumes is shared equally among stations. We '
+                 'want the spread of ridership to be lower because that would mean a lower number of stations '
+                 'that have too many or too few passengers.')
+        (ui.label('How do you select multiple stations?')
+         .style('color: black; font-size: 150%; font-weight: 500'))
+        ui.label('Click on each station individually. You will need to deselect the station you '
+                 'just selected, but your previous responses will be saved. You can view the '
+                 'stations you have selected under "Selected Stations". The exceptions to this '
+                 'are the Remove Station and Remove Line buttons, which will only save your '
+                 'most recent selection.')
+        (ui.label('Who is Rick Leary, anyway?')
+         .style('color: black; font-size: 150%; font-weight: 500'))
+        ui.label('Rick Leary is the CEO of the TTC. There is apparently a petition for him to be fired '
+                 'because of all the service delays this year. My friend Sera came up with the name.')
+
     ui.html('Are You Smarter Than Rick Leary? The TTC Improvement Game'
             ).classes('w-full text-center').style('color: black; font-size: 275%; font-weight: 500')
+    with ui.row().classes('w-full justify-center'):
+        ui.label('by Elise Corbin, 2024').style('color: black; font-size: 150%; font-weight: 500')
+        ui.link('About/FAQ', about_faq).style('color: black; font-size: 150%; font-weight: 500')
     with ui.row().classes('w-full justify-center'):
         ui.button('View Spread of Ridership',
                   on_click=lambda: label.set_text(
@@ -227,7 +289,7 @@ if __name__ in {"__main__", "__mp_main__"}:
     fig = Figure(data=data1)
     fig.update_layout(
         {'showlegend': False},
-        margin=dict(l=5, r=20, t=20, b=20),
+        margin=dict(l=20, r=20, t=20, b=20),
     )
     fig.update_xaxes(showgrid=False, zeroline=False, visible=False)
     fig.update_yaxes(showgrid=False, zeroline=False, visible=False)
