@@ -1,12 +1,8 @@
 """
 Converts a NetworkX graph into a list of plotly Scatters.
-The function visualize_graph() is a heavily modified implementation of our visualizations of book data
-from Exercises 3 and 4. Instead of returning a Figure, visualize_graph() returns a list of Scatters.
-This allows the graph in the interactive component to be updated with each addition, instead of
-making a new graph every time.
+Used for visualizing subway data.
 """
 
-import networkx as nx
 from plotly.graph_objs import Scatter
 
 import transit_map
@@ -22,7 +18,6 @@ GENERAL_COLOUR = 'rgb(0, 0, 0)'  # black
 
 
 def visualize_graph(graph: transit_map.Graph,
-                    layout: str = 'spring_layout',
                     max_vertices: int = 5000) -> list[Scatter]:
     """Use plotly and networkx to visualize the given graph.
 
@@ -32,10 +27,9 @@ def visualize_graph(graph: transit_map.Graph,
     """
     graph_nx = graph.to_networkx(max_vertices)
 
-    pos = getattr(nx, layout)(graph_nx)
+    x_values = [graph_nx.nodes[k]['position'][0] for k in graph_nx.nodes]
+    y_values = [graph_nx.nodes[k]['position'][1] for k in graph_nx.nodes]
 
-    x_values = [pos[k][0] for k in graph_nx.nodes]
-    y_values = [pos[k][1] for k in graph_nx.nodes]
     labels = [(f'{k}, '
                f'{' and '.join(str(n) for n in list(graph_nx.nodes[k]['kind'])) if len(list(graph_nx.nodes[k]['kind'])) > 0 else 'No Lines'}, '
                f'{graph_nx.nodes[k]['usage']} riders per day') for k in graph_nx.nodes]
@@ -51,8 +45,8 @@ def visualize_graph(graph: transit_map.Graph,
     x_edges = []
     y_edges = []
     for edge in graph_nx.edges:
-        x_edges += [pos[edge[0]][0], pos[edge[1]][0], None]
-        y_edges += [pos[edge[0]][1], pos[edge[1]][1], None]
+        x_edges += [graph_nx.nodes[edge[0]]['position'][0], graph_nx.nodes[edge[1]]['position'][0], None]
+        y_edges += [graph_nx.nodes[edge[0]]['position'][1], graph_nx.nodes[edge[1]]['position'][1], None]
 
     trace3 = Scatter(x=x_edges,
                      y=y_edges,
@@ -76,17 +70,3 @@ def visualize_graph(graph: transit_map.Graph,
                      )
 
     return [trace3, trace4]
-
-
-if __name__ == '__main__':
-    # import python_ta.contracts
-    # python_ta.contracts.check_all_contracts()
-
-    import python_ta
-
-    python_ta.check_all(config={
-        'max-line-length': 120,
-        'disable': ['E1136', 'W0221'],
-        'extra-imports': ['plotly', 'networkx', 'transit_map'],
-        'max-nested-blocks': 5
-    }, output='pyta_report.html')
