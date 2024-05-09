@@ -1,0 +1,68 @@
+1,BLOOR-YONGE,1 Yonge-University,93924    ,110703    ,204627,-3,0
+2,BLOOR-YONGE,2 Bloor-Danforth,96309    ,100155    ,196464,-3,0
+3,UNION,1 Yonge-University,67881    ,60774    ,128655,-4,-6
+4,ST. GEORGE,1 Yonge-University,62131    ,64797    ,126928,-5,0
+5,ST. GEORGE,2 Bloor-Danforth,62668    ,62508    ,125176,-5,0
+6,FINCH,1 Yonge-University,43356    ,48707    ,92063,-3,12
+7,SHEPPARD-YONGE,1 Yonge-University,39903    ,39812    ,79715,-3,10
+8,DUNDAS,1 Yonge-University,34807    ,38756    ,73563,-3,-3
+9,KENNEDY,2 Bloor-Danforth,35447    ,36934    ,72381,10,3
+10,EGLINTON,1 Yonge-University,29147    ,39377    ,68524,-3,5
+11,KING,1 Yonge-University,26806    ,33689    ,60495,-3,-5
+12,ST. ANDREW,1 Yonge-University,28255    ,29222    ,57477,-5,-5
+13,KIPLING,2 Bloor-Danforth,24433    ,24908    ,49341,-20,0
+14,QUEEN,1 Yonge-University,25035    ,23666    ,48701,-3,-4
+15,QUEEN'S PARK,1 Yonge-University,22574    ,23891    ,46465,-5,-2
+16,SHEPPARD-YONGE,4 Sheppard,23295    ,22451    ,45746,-3,10
+17,COLLEGE,1 Yonge-University,19121    ,25252    ,44373,-3,-2
+18,SHEPPARD WEST,1 Yonge-University,21555    ,20044    ,41599,-10,10
+19,ISLINGTON,2 Bloor-Danforth,18770    ,20480    ,39250,-19,0
+20,DON MILLS,4 Sheppard,17242    ,19803    ,37045,5,10
+21,ST. CLAIR,1 Yonge-University,17842    ,18781    ,36623,-3,3
+22,BROADVIEW,2 Bloor-Danforth,16818    ,17279    ,34096,0,0
+23,ST. PATRICK,1 Yonge-University,16430    ,17626    ,34056,-5,-3
+24,WARDEN,2 Bloor-Danforth,16733    ,16409    ,33142,9,2
+25,BAY,2 Bloor-Danforth,14984    ,17076    ,32060,-4,0
+26,SPADINA,2 Bloor-Danforth,15307    ,16635    ,31942,-6,0
+28,VICTORIA PARK,2 Bloor-Danforth,13944    ,16839    ,30783,8,1
+29,OSSINGTON,2 Bloor-Danforth,13998    ,16102    ,30100,-9,0
+30,DUNDAS WEST,2 Bloor-Danforth,12723    ,16630    ,29353,-12,0
+31,DUFFERIN,2 Bloor-Danforth,13742    ,14876    ,28618,-10,0
+32,YORK MILLS,1 Yonge-University,14335    ,14120    ,28455,-3,9
+33,ST. CLAIR WEST,1 Yonge-University,14333    ,13649    ,27982,-7,3
+34,PAPE,2 Bloor-Danforth,13226    ,13853    ,27079,2,0
+35,BATHURST,2 Bloor-Danforth,11545    ,15358    ,26903,-7,0
+36,SHERBOURNE,2 Bloor-Danforth,12985    ,13601    ,26586,-2,0
+37,WILSON,1 Yonge-University,15605    ,10704    ,26309,-10,9
+38,DAVISVILLE,1 Yonge-University,11044    ,14950    ,25994,-3,4
+39,LAWRENCE,1 Yonge-University,12406    ,13426    ,25832,-3,7
+40,NORTH YORK CENTRE,1 Yonge-University,12789    ,12595    ,25384,-3,11
+41,MAIN STREET,2 Bloor-Danforth,11669    ,12277    ,23946,7,0
+42,OSGOODE,1 Yonge-University,11201    ,12468    ,23669,-5,-4
+43,WELLESLEY,1 Yonge-University,10231    ,13282    ,23513,-3,-1
+45,ROYAL YORK,2 Bloor-Danforth,10835    ,10968    ,21803,-18,0
+46,YORKDALE,1 Yonge-University,10237    ,11315    ,21552,-10,8
+47,EGLINTON WEST,1 Yonge-University,10730    ,9998    ,20728,-10,5
+48,RUNNYMEDE,2 Bloor-Danforth,9533    ,10578    ,20111,-15,0
+49,JANE,2 Bloor-Danforth,10121    ,9984    ,20105,-16,0
+50,LAWRENCE WEST,1 Yonge-University,9074    ,10668    ,19742,-10,7
+51,LANSDOWNE,2 Bloor-Danforth,9799    ,9197    ,18996,-11,0
+52,KEELE,2 Bloor-Danforth,8611    ,8381    ,16992,-13,0
+53,COXWELL,2 Bloor-Danforth,7364    ,8120    ,15484,5,0
+54,WOODBINE,2 Bloor-Danforth,6864    ,8100    ,14964,6,0
+55,SPADINA,1 Yonge-University,5918    ,6698    ,12616,-6,0
+56,CHRISTIE,2 Bloor-Danforth,6210    ,6301    ,12511,-8,0
+57,HIGH PARK,2 Bloor-Danforth,6359    ,5716    ,12075,-14,0
+58,MUSEUM,1 Yonge-University,5363    ,6473    ,11836,-5,-1
+59,DONLANDS,2 Bloor-Danforth,6027    ,5218    ,11245,3,0
+60,GREENWOOD,2 Bloor-Danforth,5253    ,5828    ,11081,4,0
+61,CASTLE FRANK,2 Bloor-Danforth,4193    ,4697    ,8890,-1,0
+62,BAYVIEW,4 Sheppard,4149    ,4382    ,8531,-1,10
+63,DUPONT,1 Yonge-University,4141    ,4357    ,8498,-6,2
+65,ROSEDALE,1 Yonge-University,3738    ,4028    ,7766,-3,1
+66,OLD MILL,2 Bloor-Danforth,3984    ,3768    ,7752,-17,0
+67,GLENCAIRN,1 Yonge-University,3457    ,3161    ,6618,-10,6
+68,LESLIE,4 Sheppard,2989    ,3000    ,5989,3,10
+69,CHESTER,2 Bloor-Danforth,2726    ,3078    ,5804,1,0
+70,SUMMERHILL,1 Yonge-University,2773    ,2940    ,5713,-3,2
+72,BESSARION,4 Sheppard,1512    ,1476    ,2988,1,10

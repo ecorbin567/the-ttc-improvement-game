@@ -465,14 +465,12 @@ def load_subway_map(subway_file: str, lines_file: str) -> Graph:
                 g.add_vertex(row[1], {row[2]}, int(row[5].strip()), (int(row[6]), int(row[7])))
     with open(lines_file, 'r') as file:
         reader = csv.reader(file)
-        count = 0
+        first = True
         for row in reader:
-            for i in range(len(row) - 1):
-                if count == 0 and i == 0:  # gets around the beginning of the file
-                    g.add_edge(row[i][3:], row[i + 1])
-                elif row[i]:
+            if not first:
+                for i in range(len(row) - 1):
                     g.add_edge(row[i], row[i + 1])
-            count += 1
+            first = False
 
     return g
 

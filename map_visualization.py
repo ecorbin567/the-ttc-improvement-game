@@ -31,8 +31,8 @@ def visualize_graph(graph: transit_map.Graph,
     y_values = [graph_nx.nodes[k]['position'][1] for k in graph_nx.nodes]
 
     labels = [(f'{k}, '
-               f'{' and '.join(str(n) for n in list(graph_nx.nodes[k]['kind'])) if len(list(graph_nx.nodes[k]['kind'])) > 0 else 'No Lines'}, '
-               f'{graph_nx.nodes[k]['usage']} riders per day') for k in graph_nx.nodes]
+               f'{" and ".join(str(n) for n in list(graph_nx.nodes[k]["kind"])) if len(list(graph_nx.nodes[k]["kind"])) > 0 else "No Lines"}, '
+               f'{graph_nx.nodes[k]["usage"]} riders per day') for k in graph_nx.nodes]
 
     kinds = [graph_nx.nodes[k]['kind'] for k in graph_nx.nodes]
     colours = [LINE_1_COLOUR if '1 Yonge-University' in kind

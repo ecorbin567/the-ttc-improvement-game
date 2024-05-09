@@ -6,6 +6,7 @@ and add and remove lines, as well as view and reset the visualized graph.
 if __name__ in {"__main__", "__mp_main__"}:
     import transit_map
     from map_visualization import visualize_graph
+    import os
     from nicegui import ui
     from plotly.graph_objs import Figure
 
@@ -141,7 +142,7 @@ if __name__ in {"__main__", "__mp_main__"}:
     with ui.row().classes('w-full justify-center'):
         ui.button('View Spread of Ridership',
                   on_click=lambda: label.set_text(
-                      f'The average TTC station deviates from the mean ridership per day by '
+                      'The average TTC station deviates from the mean ridership per day by '
                       f'{str(subway_graph.spread_of_ridership(set()))} riders per day.'))
         label = ui.label().classes('w-full text-center').style('color: black; font-size: 100%; font-weight: 500')
     with ui.row().classes('w-full justify-center'):
@@ -203,12 +204,11 @@ if __name__ in {"__main__", "__mp_main__"}:
         with ui.row():
             @ui.refreshable
             def selected_neighbours_label() -> None:
-                ui.label(f'Selected Neighbours (select multiple to add multiple): '
-                         f'{', '.join(n for n in add_station_inputs['Neighbours'])}')
+                ui.label(f'Selected Neighbours (select multiple to add multiple): {", ".join(n for n in add_station_inputs["Neighbours"])}')
 
             @ui.refreshable
             def selected_lines_label() -> None:
-                ui.label(f'Selected Lines: {', '.join(n for n in add_station_inputs['Lines'])}')
+                ui.label(f'Selected Lines: {", ".join(n for n in add_station_inputs["Lines"])}')
 
             selected_neighbours_label()
             selected_lines_label()
@@ -268,8 +268,8 @@ if __name__ in {"__main__", "__mp_main__"}:
         with ui.row():
             @ui.refreshable
             def selected_stations_label() -> None:
-                ui.label(f'Selected Stations (select multiple to add multiple): '
-                         f'{', '.join(n for n in add_line_inputs['Stations'])}')
+                ui.label('Selected Stations (select multiple to add multiple): '
+                         f'{", ".join(n for n in add_line_inputs["Stations"])}')
 
             selected_stations_label()
 
@@ -295,4 +295,6 @@ if __name__ in {"__main__", "__mp_main__"}:
     fig.update_yaxes(showgrid=False, zeroline=False, visible=False)
     plot = ui.plotly(fig).classes('w-full h-full')
 
-    ui.run()
+    ui.run(reload='FLY_ALLOC_ID' not in os.environ, host='0.0.0.0', port=8080, title='The TTC Improvement Game')
+
+    # reload = 'FLY_ALLOC_ID' not in os.environ,
